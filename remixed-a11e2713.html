@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Fovia Labs — Cinematic reels, social media marketing & brand photography that transform businesses into unforgettable visual experiences."/>
+<meta property="og:title" content="Fovia Labs | Cinematic Visuals & Social Media Marketing"/>
+<meta property="og:description" content="We craft cinematic content, high-impact reels, and strategic social media campaigns."/>
+<title>Fovia Labs — Cinematic Visuals & Social Media Marketing</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#080810;--surface:#0f0f1a;--card:#13131f;
+  --accent1:#e8ff47;--accent2:#7b5ea7;--accent3:#ff4f6d;
+  --text:#f0eff8;--muted:#6b6a80;--border:rgba(255,255,255,0.06);
+  --glow:0 0 60px rgba(232,255,71,0.18);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;overflow-x:hidden;cursor:none}
+
+/* LOADER */
+#loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 0.6s,visibility 0.6s}
+#loader.hidden{opacity:0;visibility:hidden}
+.loader-logo{font-family:'Bebas Neue',sans-serif;font-size:48px;letter-spacing:8px;color:var(--accent1);overflow:hidden}
+.loader-bar-wrap{width:200px;height:2px;background:rgba(255,255,255,0.1);margin-top:24px}
+.loader-bar{height:100%;background:var(--accent1);width:0;transition:width 0.05s linear}
+.loader-pct{font-family:'Syne',sans-serif;font-size:12px;letter-spacing:3px;color:var(--muted);margin-top:12px}
+
+/* CURSOR */
+#cur{width:12px;height:12px;background:var(--accent1);border-radius:50%;position:fixed;pointer-events:none;z-index:8999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .3s,height .3s}
+#cur-t{width:36px;height:36px;border:1.5px solid rgba(232,255,71,0.4);border-radius:50%;position:fixed;pointer-events:none;z-index:8998;transform:translate(-50%,-50%);transition:left .15s ease,top .15s ease,width .3s,height .3s}
+
+/* NOISE */
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:1000;opacity:.35}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:linear-gradient(to bottom,rgba(8,8,16,.96),transparent);backdrop-filter:blur(4px)}
+.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:var(--accent1);text-decoration:none}
+.nav-logo span{color:var(--text)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .3s}
+.nav-links a:hover,.nav-links a.active{color:var(--accent1)}
+.nav-cta{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent1);color:#080810;padding:10px 22px;border:none;text-decoration:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);transition:box-shadow .3s,transform .2s}
+.nav-cta:hover{box-shadow:var(--glow);transform:translateY(-1px)}
+
+/* HERO */
+#hero{min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;padding:0 48px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 30%,rgba(123,94,167,.25) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 20% 80%,rgba(232,255,71,.08) 0%,transparent 60%),radial-gradient(ellipse 40% 50% at 80% 70%,rgba(255,79,109,.12) 0%,transparent 60%)}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,black 30%,transparent 80%)}
+.hero-reel{position:absolute;top:10%;right:5%;width:400px;height:520px;border:1px solid var(--border);overflow:hidden;animation:floatReel 6s ease-in-out infinite}
+.hero-reel::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(123,94,167,.3) 0%,rgba(255,79,109,.2) 40%,rgba(8,8,16,.8) 100%);z-index:2}
+.hero-reel-inner{width:100%;height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:2px}
+.rc{background:var(--card);position:relative;overflow:hidden;animation:cP 3s ease-in-out infinite}
+.rc:nth-child(1){animation-delay:0s;background:linear-gradient(135deg,#1a1030,#2d1547)}
+.rc:nth-child(2){animation-delay:.5s;background:linear-gradient(135deg,#0d1a20,#1a3040)}
+.rc:nth-child(3){animation-delay:1s;background:linear-gradient(135deg,#1a0d15,#3d1530)}
+.rc:nth-child(4){animation-delay:1.5s;background:linear-gradient(135deg,#141430,#2a2a60)}
+.rc:nth-child(5){animation-delay:2s;background:linear-gradient(135deg,#1a1505,#3d3510);grid-column:span 2}
+.rc:nth-child(6){animation-delay:2.5s;background:linear-gradient(135deg,#101a0d,#203015)}
+.rb{position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent1);transform:scaleX(0);transform-origin:left;animation:bF 3s ease-in-out infinite}
+.rc:nth-child(1) .rb{animation-delay:0s}.rc:nth-child(2) .rb{animation-delay:.8s}.rc:nth-child(3) .rb{animation-delay:1.6s}
+@keyframes floatReel{0%,100%{transform:translateY(0) rotate(.5deg)}50%{transform:translateY(-20px) rotate(-.5deg)}}
+@keyframes cP{0%,100%{opacity:.7}50%{opacity:1}}
+@keyframes bF{0%{transform:scaleX(0)}50%{transform:scaleX(1)}100%{transform:scaleX(0);transform-origin:right}}
+.hero-tag{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--accent1);margin-bottom:16px;opacity:0;animation:fadeUp .8s .3s forwards}
+.hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(68px,10vw,136px);line-height:.9;letter-spacing:2px;max-width:700px;opacity:0;animation:fadeUp .8s .5s forwards}
+.hero-title .outline{-webkit-text-stroke:1.5px var(--text);color:transparent}
+.hero-title .accent{color:var(--accent1)}
+.hero-sub{font-size:16px;font-weight:300;color:var(--muted);max-width:400px;line-height:1.7;margin-top:20px;opacity:0;animation:fadeUp .8s .7s forwards}
+.hero-actions{display:flex;gap:14px;margin-top:36px;opacity:0;animation:fadeUp .8s .9s forwards}
+.btn-primary{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent1);color:#080810;padding:15px 34px;border:none;cursor:none;text-decoration:none;display:inline-block;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:box-shadow .3s,transform .2s}
+.btn-primary:hover{box-shadow:var(--glow);transform:translateY(-2px)}
+.btn-ghost{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--text);background:transparent;padding:15px 34px;border:1px solid var(--border);cursor:none;text-decoration:none;display:inline-block;transition:border-color .3s,color .3s}
+.btn-ghost:hover{border-color:var(--accent1);color:var(--accent1)}
+.hero-scroll{position:absolute;bottom:40px;right:48px;display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeUp 1s 1.2s forwards}
+.scroll-line{width:1px;height:56px;background:linear-gradient(to bottom,var(--accent1),transparent);animation:sP 2s ease-in-out infinite}
+.scroll-text{font-family:'Syne',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl}
+@keyframes sP{0%,100%{opacity:.4;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* MARQUEE */
+.marquee-section{border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:16px 0;overflow:hidden;background:rgba(232,255,71,.03)}
+.marquee-track{display:flex;animation:mq 22s linear infinite;white-space:nowrap}
+.marquee-item{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:var(--muted);padding:0 36px;flex-shrink:0}
+.marquee-item .dot{color:var(--accent1);margin-right:36px}
+@keyframes mq{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* CLIENTS */
+#clients{padding:60px 48px;border-bottom:1px solid var(--border)}
+.clients-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--muted);text-align:center;margin-bottom:36px}
+.clients-grid{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:0}
+.client-logo{padding:20px 40px;border:1px solid transparent;font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:rgba(240,239,248,.2);transition:color .4s,border-color .4s;cursor:none}
+.client-logo:hover{color:var(--text);border-color:var(--border)}
+
+/* SECTION COMMONS */
+.section-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:5px;text-transform:uppercase;color:var(--accent1);margin-bottom:14px}
+.section-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,6vw,76px);letter-spacing:2px;line-height:.95;margin-bottom:56px}
+.section-title .dim{color:var(--muted)}
+
+/* SERVICES */
+#services{padding:110px 48px}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+.service-card{background:var(--card);padding:44px 34px;border:1px solid var(--border);position:relative;overflow:hidden;transition:border-color .4s,transform .3s;cursor:none}
+.service-card::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:linear-gradient(90deg,var(--accent1),transparent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.service-card:hover{border-color:rgba(232,255,71,.2);transform:translateY(-4px)}
+.service-card:hover::before{transform:scaleX(1)}
+.service-num{font-family:'Bebas Neue',sans-serif;font-size:60px;color:rgba(232,255,71,.07);line-height:1;margin-bottom:16px;transition:color .4s}
+.service-card:hover .service-num{color:rgba(232,255,71,.14)}
+.service-icon{width:46px;height:46px;margin-bottom:20px;display:flex;align-items:center;justify-content:center}
+.service-icon svg{width:100%;height:100%}
+.service-name{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;margin-bottom:10px}
+.service-desc{font-size:14px;line-height:1.7;color:var(--muted);font-weight:300}
+
+/* STATS */
+#stats{padding:70px 48px;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat-item{padding:44px 32px;border-right:1px solid var(--border)}
+.stat-item:last-child{border-right:none}
+.stat-num{font-family:'Bebas Neue',sans-serif;font-size:68px;color:var(--accent1);line-height:1}
+.stat-label{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-top:6px}
+
+/* WORK */
+#work{padding:110px 48px}
+.work-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:52px}
+.portfolio-grid{display:grid;grid-template-columns:2fr 1fr 1fr;grid-template-rows:300px 230px;gap:4px}
+.portfolio-item{position:relative;overflow:hidden;cursor:none}
+.portfolio-item:first-child{grid-row:span 2}
+.portfolio-bg{width:100%;height:100%;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
+.portfolio-item:hover .portfolio-bg{transform:scale(1.07)}
+.p1{background:linear-gradient(135deg,#1a0d30 0%,#3d1560 40%,#7b3090 100%)}
+.p2{background:linear-gradient(135deg,#0d1a1a 0%,#103030 40%,#206060 100%)}
+.p3{background:linear-gradient(135deg,#1a0d10 0%,#3d1020 40%,#8f1840 100%)}
+.p4{background:linear-gradient(135deg,#0d0d1a 0%,#151545 40%,#2828a0 100%)}
+.p5{background:linear-gradient(135deg,#1a1505 0%,#3d3505 40%,#a09005 100%)}
+.portfolio-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,16,.9) 0%,transparent 60%);display:flex;flex-direction:column;justify-content:flex-end;padding:26px;opacity:0;transition:opacity .4s}
+.portfolio-item:hover .portfolio-overlay{opacity:1}
+.portfolio-cat{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent1);margin-bottom:4px}
+.portfolio-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700}
+.play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);width:66px;height:66px;border:2px solid var(--accent1);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .4s cubic-bezier(.34,1.56,.64,1)}
+.portfolio-item:hover .play-btn{transform:translate(-50%,-50%) scale(1)}
+.play-btn svg{fill:var(--accent1);width:22px;margin-left:4px}
+
+/* PRICING */
+#pricing{padding:110px 48px;background:var(--surface)}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:56px}
+.pricing-card{background:var(--card);border:1px solid var(--border);padding:44px 36px;position:relative;transition:border-color .4s,transform .3s;cursor:none}
+.pricing-card.featured{border-color:var(--accent1);transform:translateY(-8px)}
+.pricing-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--accent1);color:#080810;font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 18px;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+.pricing-card:hover:not(.featured){border-color:rgba(232,255,71,.2);transform:translateY(-4px)}
+.pricing-tier{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.pricing-price{font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--text);line-height:1;margin-bottom:4px}
+.pricing-price sup{font-size:28px;vertical-align:super;color:var(--accent1)}
+.pricing-period{font-size:13px;color:var(--muted);margin-bottom:32px}
+.pricing-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:36px}
+.pricing-features li{font-size:14px;color:rgba(240,239,248,.75);display:flex;align-items:center;gap:10px}
+.pricing-features li::before{content:'✦';color:var(--accent1);font-size:10px;flex-shrink:0}
+.pricing-features li.off{color:var(--muted)}
+.pricing-features li.off::before{content:'✦';color:rgba(107,106,128,.3)}
+.pricing-btn{width:100%;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:14px;border:none;cursor:none;transition:all .3s}
+.pricing-btn.primary{background:var(--accent1);color:#080810;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
+.pricing-btn.primary:hover{box-shadow:var(--glow)}
+.pricing-btn.outline{background:transparent;border:1px solid var(--border);color:var(--text)}
+.pricing-btn.outline:hover{border-color:var(--accent1);color:var(--accent1)}
+
+/* PROCESS */
+#process{padding:110px 48px}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);margin-top:56px}
+.step{padding:38px 30px;border-right:1px solid var(--border);position:relative}
+.step:last-child{border-right:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:76px;color:rgba(232,255,71,.05);line-height:1;position:absolute;top:18px;right:20px}
+.step-idx{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;color:var(--accent1);margin-bottom:20px}
+.step-title{font-family:'Syne',sans-serif;font-size:21px;font-weight:700;margin-bottom:10px}
+.step-desc{font-size:14px;line-height:1.7;color:var(--muted)}
+
+/* TESTIMONIALS */
+#testimonials{padding:110px 48px;background:var(--surface)}
+.testimonials-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;margin-top:56px}
+.testi-card{background:var(--card);padding:44px;border:1px solid var(--border);transition:border-color .3s;cursor:none}
+.testi-card:hover{border-color:rgba(232,255,71,.15)}
+.testi-stars{color:var(--accent1);font-size:13px;margin-bottom:10px}
+.testi-quote{font-family:'Bebas Neue',sans-serif;font-size:72px;line-height:.6;color:var(--accent1);opacity:.25;margin-bottom:20px}
+.testi-text{font-size:16px;line-height:1.8;font-weight:300;font-style:italic;color:var(--text);margin-bottom:32px}
+.testi-author{display:flex;align-items:center;gap:14px}
+.testi-avatar{width:46px;height:46px;border-radius:50%;border:2px solid var(--accent1);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;background:var(--surface)}
+.testi-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+.testi-role{font-size:12px;color:var(--muted);margin-top:2px;letter-spacing:1px}
+
+/* FAQ */
+#faq{padding:110px 48px}
+.faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;margin-top:56px}
+.faq-item{background:var(--card);border:1px solid var(--border);overflow:hidden}
+.faq-q{width:100%;background:transparent;border:none;color:var(--text);font-family:'Syne',sans-serif;font-size:15px;font-weight:600;text-align:left;padding:26px 30px;display:flex;justify-content:space-between;align-items:center;cursor:none;gap:16px}
+.faq-q .icon{width:24px;height:24px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .3s,border-color .3s;font-size:14px;color:var(--muted)}
+.faq-item.open .faq-q .icon{background:var(--accent1);border-color:var(--accent1);color:#080810}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .4s ease,padding .3s}
+.faq-a-inner{padding:0 30px 24px;font-size:14px;line-height:1.75;color:var(--muted)}
+.faq-item.open .faq-a{max-height:200px}
+
+/* QUIZ MODAL */
+#quiz-overlay{position:fixed;inset:0;background:rgba(8,8,16,.92);z-index:800;display:flex;align-items:center;justify-content:center;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;backdrop-filter:blur(8px)}
+#quiz-overlay.active{opacity:1;visibility:visible}
+.quiz-box{background:var(--card);border:1px solid rgba(232,255,71,.2);width:560px;max-width:95vw;padding:52px 48px;position:relative}
+.quiz-close{position:absolute;top:20px;right:20px;background:transparent;border:1px solid var(--border);color:var(--muted);width:36px;height:36px;font-size:18px;cursor:none;transition:border-color .3s,color .3s}
+.quiz-close:hover{border-color:var(--accent1);color:var(--accent1)}
+.quiz-step{display:none}.quiz-step.active{display:block}
+.quiz-step-label{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--accent1);margin-bottom:10px}
+.quiz-q{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-bottom:28px;line-height:1.3}
+.quiz-options{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.quiz-opt{background:var(--surface);border:1px solid var(--border);color:var(--text);font-family:'Syne',sans-serif;font-size:13px;font-weight:600;padding:14px 18px;cursor:none;transition:all .2s;text-align:left}
+.quiz-opt:hover,.quiz-opt.selected{border-color:var(--accent1);background:rgba(232,255,71,.07);color:var(--accent1)}
+.quiz-nav{display:flex;justify-content:space-between;align-items:center}
+.quiz-progress{font-family:'Syne',sans-serif;font-size:11px;letter-spacing:2px;color:var(--muted)}
+.quiz-progress-bar{width:100%;height:2px;background:rgba(255,255,255,.08);margin-bottom:36px}
+.quiz-progress-fill{height:100%;background:var(--accent1);transition:width .4s}
+.quiz-result{text-align:center}
+.quiz-result h3{font-family:'Bebas Neue',sans-serif;font-size:44px;color:var(--accent1);margin-bottom:12px}
+.quiz-result p{font-size:15px;color:var(--muted);line-height:1.7;margin-bottom:28px}
+
+/* CONTACT */
+#contact{padding:110px 48px}
+.contact-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.contact-info h2{font-family:'Bebas Neue',sans-serif;font-size:68px;line-height:.9;margin-bottom:20px}
+.contact-info h2 span{color:var(--accent1)}
+.contact-info p{font-size:15px;line-height:1.7;color:var(--muted);margin-bottom:44px}
+.contact-detail{display:flex;align-items:center;gap:14px;margin-bottom:20px}
+.contact-icon{width:42px;height:42px;background:rgba(232,255,71,.06);border:1px solid rgba(232,255,71,.12);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.contact-icon svg{width:18px;fill:var(--accent1)}
+.contact-detail-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.contact-detail-text a,.contact-detail-text span{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text);text-decoration:none;transition:color .3s}
+.contact-detail-text a:hover{color:var(--accent1)}
+.contact-form{display:flex;flex-direction:column;gap:14px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.form-group{display:flex;flex-direction:column;gap:7px}
+.form-label{font-family:'Syne',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+.form-input,.form-textarea,.form-select{background:var(--card);border:1px solid var(--border);color:var(--text);padding:13px 16px;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color .3s;cursor:none}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:var(--accent1)}
+.form-select option{background:var(--card)}
+.form-textarea{resize:none;height:120px}
+::placeholder{color:var(--muted)}
+.form-submit{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;background:var(--accent1);color:#080810;border:none;padding:16px 38px;cursor:none;align-self:flex-start;clip-path:polygon(10px 0%,100% 0%,calc(100% - 10px) 100%,0% 100%);transition:box-shadow .3s,transform .2s}
+.form-submit:hover{box-shadow:var(--glow);transform:translateY(-2px)}
+
+/* STICKY CTA */
+#sticky-cta{position:fixed;bottom:32px;right:32px;z-index:600;opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s;pointer-events:none}
+#sticky-cta.show{opacity:1;transform:translateY(0);pointer-events:all}
+.sticky-btn{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent1);color:#080810;padding:14px 24px;border:none;cursor:none;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%);box-shadow:0 8px 40px rgba(232,255,71,.35);transition:box-shadow .3s,transform .2s;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.sticky-btn:hover{transform:translateY(-2px);box-shadow:0 12px 50px rgba(232,255,71,.5)}
+.sticky-pulse{width:8px;height:8px;background:#080810;border-radius:50%;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.7}}
+
+/* FOOTER */
+footer{padding:56px 48px 32px;border-top:1px solid var(--border)}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:52px}
+.footer-brand .logo{font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:4px;color:var(--accent1)}
+.footer-brand .logo span{color:var(--muted)}
+.footer-brand p{font-size:13px;color:var(--muted);max-width:240px;margin-top:10px;line-height:1.6}
+.footer-social{display:flex;gap:10px;margin-top:18px}
+.social-btn{width:38px;height:38px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--muted);text-decoration:none;font-size:12px;font-family:'Syne',sans-serif;font-weight:700;transition:border-color .3s,color .3s,background .3s}
+.social-btn:hover{border-color:var(--accent1);color:var(--accent1);background:rgba(232,255,71,.05)}
+.footer-links h4{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:18px}
+.footer-links ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.footer-links a{font-size:13px;color:rgba(240,239,248,.55);text-decoration:none;transition:color .3s}
+.footer-links a:hover{color:var(--accent1)}
+.footer-bottom{display:flex;justify-content:space-between;padding-top:24px;border-top:1px solid var(--border);font-size:12px;color:var(--muted)}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(36px);transition:opacity .7s ease,transform .7s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* COOKIE */
+#cookie{position:fixed;bottom:0;left:0;right:0;z-index:700;background:rgba(15,15,26,.97);border-top:1px solid var(--border);padding:20px 48px;display:flex;align-items:center;justify-content:space-between;gap:24px;backdrop-filter:blur(8px);transform:translateY(100%);transition:transform .5s}
+#cookie.show{transform:translateY(0)}
+#cookie p{font-size:13px;color:var(--muted);line-height:1.6;max-width:600px}
+#cookie p a{color:var(--accent1);text-decoration:none}
+.cookie-btns{display:flex;gap:10px;flex-shrink:0}
+.cookie-accept{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;background:var(--accent1);color:#080810;border:none;padding:10px 22px;cursor:none;clip-path:polygon(6px 0%,100% 0%,calc(100% - 6px) 100%,0% 100%)}
+.cookie-decline{font-family:'Syne',sans-serif;font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;background:transparent;color:var(--muted);border:1px solid var(--border);padding:10px 22px;cursor:none;transition:color .3s,border-color .3s}
+.cookie-decline:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  nav{padding:18px 24px}.nav-links{display:none}
+  #hero{padding:0 24px 56px}.hero-reel{display:none}
+  .services-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .portfolio-grid{grid-template-columns:1fr;grid-template-rows:auto}.portfolio-item:first-child{grid-row:auto}
+  .pricing-grid{grid-template-columns:1fr}.pricing-card.featured{transform:none}
+  .process-steps{grid-template-columns:1fr 1fr}
+  .testimonials-grid{grid-template-columns:1fr}
+  .faq-grid{grid-template-columns:1fr}
+  .contact-wrapper{grid-template-columns:1fr;gap:44px}
+  .footer-inner{flex-direction:column;gap:36px}
+  #services,#work,#pricing,#process,#testimonials,#faq,#contact{padding:80px 24px}
+  #stats,#clients{padding:56px 24px}
+  footer{padding:44px 24px 28px}
+  #cookie{padding:20px 24px;flex-direction:column;align-items:flex-start}
+  .client-logo{padding:16px 24px;font-size:18px}
+  #sticky-cta{bottom:80px;right:20px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <div class="loader-logo">FOVIA LABS</div>
+  <div class="loader-bar-wrap"><div class="loader-bar" id="lbar"></div></div>
+  <div class="loader-pct" id="lpct">0%</div>
+</div>
+
+<!-- CURSOR -->
+<div id="cur"></div>
+<div id="cur-t"></div>
+
+<!-- STICKY CTA -->
+<div id="sticky-cta">
+  <button class="sticky-btn" onclick="openQuiz()">
+    <div class="sticky-pulse"></div>
+    Book Free Call
+  </button>
+</div>
+
+<!-- QUIZ MODAL -->
+<div id="quiz-overlay">
+  <div class="quiz-box">
+    <button class="quiz-close" onclick="closeQuiz()">✕</button>
+    <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="qpfill" style="width:20%"></div></div>
+
+    <!-- Step 1 -->
+    <div class="quiz-step active" id="qs1">
+      <div class="quiz-step-label">Step 1 of 4</div>
+      <div class="quiz-q">What best describes your business?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,'biz','Product Brand')">🛍 Product Brand</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'biz','Service Business')">💼 Service Business</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'biz','Restaurant / Café')">🍽 Restaurant / Café</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'biz','Creator / Influencer')">🎥 Creator / Influencer</button>
+      </div>
+      <div class="quiz-nav">
+        <div class="quiz-progress">1 / 4</div>
+        <button class="btn-primary" onclick="nextStep(1)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="quiz-step" id="qs2">
+      <div class="quiz-step-label">Step 2 of 4</div>
+      <div class="quiz-q">Which platforms do you need content for?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,'platform','Instagram')">📸 Instagram</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'platform','YouTube')">▶ YouTube</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'platform','Facebook')">👤 Facebook</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'platform','LinkedIn')">💼 LinkedIn</button>
+      </div>
+      <div class="quiz-nav">
+        <div class="quiz-progress">2 / 4</div>
+        <button class="btn-primary" onclick="nextStep(2)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="quiz-step" id="qs3">
+      <div class="quiz-step-label">Step 3 of 4</div>
+      <div class="quiz-q">What's your monthly budget range?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,'budget','Under ₹15K')">Under ₹15,000</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'budget','₹15K–₹40K')">₹15,000 – ₹40,000</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'budget','₹40K–₹80K')">₹40,000 – ₹80,000</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'budget','₹80K+')">₹80,000+</button>
+      </div>
+      <div class="quiz-nav">
+        <div class="quiz-progress">3 / 4</div>
+        <button class="btn-primary" onclick="nextStep(3)">Next →</button>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="quiz-step" id="qs4">
+      <div class="quiz-step-label">Step 4 of 4</div>
+      <div class="quiz-q">What's your primary goal?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" onclick="selectOpt(this,'goal','Grow Followers')">📈 Grow Followers</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'goal','Drive Sales')">💰 Drive Sales</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'goal','Build Brand Awareness')">🌟 Brand Awareness</button>
+        <button class="quiz-opt" onclick="selectOpt(this,'goal','Launch a Product')">🚀 Launch a Product</button>
+      </div>
+      <div class="quiz-nav">
+        <div class="quiz-progress">4 / 4</div>
+        <button class="btn-primary" onclick="showResult()">Get My Plan →</button>
+      </div>
+    </div>
+
+    <!-- Result -->
+    <div class="quiz-step quiz-result" id="qs5">
+      <div style="font-size:40px;margin-bottom:12px">🎬</div>
+      <h3 id="quiz-plan-name">GROWTH PLAN</h3>
+      <p id="quiz-plan-desc">Based on your answers, we recommend our Growth package — perfect for driving sales on Instagram with consistent cinematic reels and targeted ad campaigns.</p>
+      <a href="#contact" class="btn-primary" onclick="closeQuiz()" style="display:inline-block;margin-top:4px">Book a Free Discovery Call →</a>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a class="nav-logo" href="#">FOVIA<span> LABS</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#work">Work</a></li>
+    <li><a href="#pricing">Pricing</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="openQuiz();return false">Get a Free Quote</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-reel">
+    <div class="hero-reel-inner">
+      <div class="rc"><div class="rb"></div><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.14" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" stroke="#e8ff47" stroke-width="1" fill="none"/><line x1="20" y1="50" x2="80" y2="50" stroke="#e8ff47" stroke-width=".5"/><line x1="50" y1="20" x2="50" y2="80" stroke="#e8ff47" stroke-width=".5"/></svg></div>
+      <div class="rc"><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.14" viewBox="0 0 100 100"><rect x="20" y="30" width="60" height="40" stroke="#7b5ea7" stroke-width="1" fill="none" rx="2"/><polygon points="43,40 43,60 63,50" fill="#7b5ea7" opacity=".6"/></svg></div>
+      <div class="rc"><div class="rb"></div><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.18" viewBox="0 0 100 100"><path d="M10 80 Q50 20 90 80" stroke="#ff4f6d" stroke-width="1.5" fill="none"/></svg></div>
+      <div class="rc"><div class="rb"></div><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.18" viewBox="0 0 100 100"><rect x="15" y="15" width="70" height="70" stroke="#e8ff47" stroke-width=".5" fill="none"/><rect x="30" y="30" width="40" height="40" stroke="#e8ff47" stroke-width=".5" fill="none" transform="rotate(15 50 50)"/></svg></div>
+      <div class="rc" style="grid-column:span 2"><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.1" viewBox="0 0 200 80"><text x="20" y="56" font-family="serif" font-size="40" fill="#e8ff47" font-style="italic">FOVIA</text></svg></div>
+      <div class="rc"><svg style="position:absolute;inset:0;width:100%;height:100%;opacity:.18" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" stroke="#7b5ea7" stroke-width="1" fill="none"/><circle cx="50" cy="50" r="35" stroke="#7b5ea7" stroke-width=".5" fill="none" stroke-dasharray="4 4"/></svg></div>
+    </div>
+  </div>
+  <div class="hero-tag">✦ Social Media · Marketing · Cinematic Visuals</div>
+  <h1 class="hero-title">VISUAL<br><span class="outline">STORIES</span><br><span class="accent">THAT SELL.</span></h1>
+  <p class="hero-sub">We craft cinematic content, high-impact reels, and strategic social media campaigns that transform brands into unforgettable experiences.</p>
+  <div class="hero-actions">
+    <a href="#work" class="btn-primary">View Our Work</a>
+    <button class="btn-ghost" onclick="openQuiz()">Get Free Quote →</button>
+  </div>
+  <div class="hero-scroll"><div class="scroll-line"></div><span class="scroll-text">Scroll</span></div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <span class="marquee-item"><span class="dot">✦</span>SOCIAL MEDIA MARKETING</span>
+    <span class="marquee-item"><span class="dot">✦</span>CINEMATIC REELS</span>
+    <span class="marquee-item"><span class="dot">✦</span>BRAND PHOTOGRAPHY</span>
+    <span class="marquee-item"><span class="dot">✦</span>VIDEO PRODUCTION</span>
+    <span class="marquee-item"><span class="dot">✦</span>CONTENT STRATEGY</span>
+    <span class="marquee-item"><span class="dot">✦</span>DIGITAL CAMPAIGNS</span>
+    <span class="marquee-item"><span class="dot">✦</span>MOTION GRAPHICS</span>
+    <span class="marquee-item"><span class="dot">✦</span>SOCIAL MEDIA MARKETING</span>
+    <span class="marquee-item"><span class="dot">✦</span>CINEMATIC REELS</span>
+    <span class="marquee-item"><span class="dot">✦</span>BRAND PHOTOGRAPHY</span>
+    <span class="marquee-item"><span class="dot">✦</span>VIDEO PRODUCTION</span>
+    <span class="marquee-item"><span class="dot">✦</span>CONTENT STRATEGY</span>
+    <span class="marquee-item"><span class="dot">✦</span>DIGITAL CAMPAIGNS</span>
+    <span class="marquee-item"><span class="dot">✦</span>MOTION GRAPHICS</span>
+  </div>
+</div>
+
+<!-- CLIENTS -->
+<section id="clients">
+  <div class="clients-label reveal">Trusted By Brands Across India</div>
+  <div class="clients-grid reveal">
+    <div class="client-logo">BRANDCO</div>
+    <div class="client-logo">LUXEHIVE</div>
+    <div class="client-logo">NOVA RETAIL</div>
+    <div class="client-logo">URBANBREW</div>
+    <div class="client-logo">STYLEHAUS</div>
+    <div class="client-logo">AURA MEDIA</div>
+    <div class="client-logo">BLOOM CO</div>
+    <div class="client-logo">KREATIVE+</div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-label">What We Do</div>
+  <h2 class="section-title reveal">OUR<br><span class="dim">SERVICES</span></h2>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="4" y="10" width="40" height="28" rx="2" stroke="#e8ff47" stroke-width="1.5"/><polygon points="20,18 20,30 32,24" fill="#e8ff47"/></svg></div>
+      <div class="service-name">Cinematic Reels</div>
+      <p class="service-desc">Scroll-stopping Instagram and YouTube reels shot and edited with cinematic flair — colour graded to perfection and synced with trending audio.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.1s">
+      <div class="service-num">02</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="16" stroke="#e8ff47" stroke-width="1.5"/><circle cx="24" cy="16" r="5" stroke="#e8ff47" stroke-width="1.5"/><path d="M12 38c0-6.627 5.373-10 12-10s12 3.373 12 10" stroke="#e8ff47" stroke-width="1.5"/></svg></div>
+      <div class="service-name">Social Media Marketing</div>
+      <p class="service-desc">Full-funnel social strategies for Instagram, Facebook, LinkedIn, and YouTube — including content planning, scheduling, and growth analytics.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.2s">
+      <div class="service-num">03</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><rect x="8" y="8" width="14" height="14" rx="1" stroke="#e8ff47" stroke-width="1.5"/><rect x="26" y="8" width="14" height="14" rx="1" stroke="#e8ff47" stroke-width="1.5"/><rect x="8" y="26" width="14" height="14" rx="1" stroke="#e8ff47" stroke-width="1.5"/><rect x="26" y="26" width="14" height="14" rx="1" stroke="#e8ff47" stroke-width="1.5"/></svg></div>
+      <div class="service-name">Brand Photography</div>
+      <p class="service-desc">High-resolution product and brand photography that communicates quality, personality, and value across all your digital channels.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.3s">
+      <div class="service-num">04</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M6 38 L18 22 L28 32 L36 20 L42 28" stroke="#e8ff47" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="36" cy="12" r="6" stroke="#e8ff47" stroke-width="1.5"/></svg></div>
+      <div class="service-name">Ad Campaigns</div>
+      <p class="service-desc">Paid social and video ad campaigns with compelling creative — from concept and scripting to production and real-time performance optimisation.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.4s">
+      <div class="service-num">05</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><path d="M24 6 L44 18 L44 30 L24 42 L4 30 L4 18 Z" stroke="#e8ff47" stroke-width="1.5"/></svg></div>
+      <div class="service-name">Brand Identity</div>
+      <p class="service-desc">Visual language systems, logo design, and brand guidelines that ensure cohesion and premium presence across every touchpoint.</p>
+    </div>
+    <div class="service-card reveal" style="transition-delay:.5s">
+      <div class="service-num">06</div>
+      <div class="service-icon"><svg viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="18" stroke="#e8ff47" stroke-width="1.5"/><path d="M16 24 Q20 16 24 24 Q28 32 32 24" stroke="#e8ff47" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="service-name">Motion Graphics</div>
+      <p class="service-desc">Dynamic animated graphics, intros, lower-thirds, and transitions that elevate production value and keep audiences engaged.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section id="stats">
+  <div class="stats-grid">
+    <div class="stat-item reveal"><div class="stat-num">150+</div><div class="stat-label">Projects Delivered</div></div>
+    <div class="stat-item reveal" style="transition-delay:.1s"><div class="stat-num">80+</div><div class="stat-label">Happy Clients</div></div>
+    <div class="stat-item reveal" style="transition-delay:.2s"><div class="stat-num">5M+</div><div class="stat-label">Views Generated</div></div>
+    <div class="stat-item reveal" style="transition-delay:.3s"><div class="stat-num">3X</div><div class="stat-label">Avg Engagement Lift</div></div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="work-header reveal">
+    <div>
+      <div class="section-label">Portfolio</div>
+      <h2 class="section-title" style="margin-bottom:0">SELECTED<br><span style="color:var(--muted)">WORK</span></h2>
+    </div>
+    <a href="#contact" class="btn-ghost">All Projects →</a>
+  </div>
+  <div class="portfolio-grid reveal">
+    <div class="portfolio-item">
+      <div class="portfolio-bg p1" style="height:100%"></div>
+      <div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg></div>
+      <div class="portfolio-overlay"><div class="portfolio-cat">Cinematic Reel</div><div class="portfolio-title">Brand Launch Campaign</div></div>
+    </div>
+    <div class="portfolio-item">
+      <div class="portfolio-bg p2" style="height:100%"></div>
+      <div class="portfolio-overlay"><div class="portfolio-cat">Photography</div><div class="portfolio-title">Product Shoot Series</div></div>
+    </div>
+    <div class="portfolio-item">
+      <div class="portfolio-bg p3" style="height:100%"></div>
+      <div class="portfolio-overlay"><div class="portfolio-cat">Social Media</div><div class="portfolio-title">Instagram Growth Campaign</div></div>
+    </div>
+    <div class="portfolio-item">
+      <div class="portfolio-bg p4" style="height:100%"></div>
+      <div class="portfolio-overlay"><div class="portfolio-cat">Motion Graphics</div><div class="portfolio-title">Event Promo Video</div></div>
+    </div>
+    <div class="portfolio-item">
+      <div class="portfolio-bg p5" style="height:100%"></div>
+      <div class="portfolio-overlay"><div class="portfolio-cat">Ad Campaign</div><div class="portfolio-title">Paid Social Series</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">Transparent Pricing</div>
+  <h2 class="section-title reveal">PLANS &<br><span class="dim">PACKAGES</span></h2>
+  <div class="pricing-grid">
+    <!-- Starter -->
+    <div class="pricing-card reveal">
+      <div class="pricing-tier">Starter</div>
+      <div class="pricing-price"><sup>₹</sup>12,999</div>
+      <div class="pricing-period">per month</div>
+      <ul class="pricing-features">
+        <li>8 Social Media Posts / Month</li>
+        <li>2 Reels / Shorts</li>
+        <li>Basic Caption Copywriting</li>
+        <li>1 Platform Management</li>
+        <li>Monthly Performance Report</li>
+        <li class="off">Brand Photography Shoot</li>
+        <li class="off">Paid Ad Campaign</li>
+        <li class="off">Dedicated Account Manager</li>
+      </ul>
+      <button class="pricing-btn outline" onclick="openQuiz()">Get Started</button>
+    </div>
+    <!-- Growth -->
+    <div class="pricing-card featured reveal" style="transition-delay:.15s">
+      <div class="pricing-badge">Most Popular</div>
+      <div class="pricing-tier">Growth</div>
+      <div class="pricing-price"><sup>₹</sup>29,999</div>
+      <div class="pricing-period">per month</div>
+      <ul class="pricing-features">
+        <li>20 Social Media Posts / Month</li>
+        <li>6 Cinematic Reels</li>
+        <li>Full Copywriting & Hashtag Strategy</li>
+        <li>3 Platforms Management</li>
+        <li>1 Brand Photography Shoot</li>
+        <li>Basic Paid Ad Campaign</li>
+        <li>Bi-Weekly Performance Report</li>
+        <li class="off">Dedicated Account Manager</li>
+      </ul>
+      <button class="pricing-btn primary" onclick="openQuiz()">Get Started</button>
+    </div>
+    <!-- Premium -->
+    <div class="pricing-card reveal" style="transition-delay:.3s">
+      <div class="pricing-tier">Premium</div>
+      <div class="pricing-price"><sup>₹</sup>59,999</div>
+      <div class="pricing-period">per month</div>
+      <ul class="pricing-features">
+        <li>Unlimited Social Media Posts</li>
+        <li>12 Cinematic Reels + Motion Graphics</li>
+        <li>Full Copywriting & Content Calendar</li>
+        <li>All Platforms Management</li>
+        <li>2 Brand Photography Shoots</li>
+        <li>Full Paid Ad Campaign Management</li>
+        <li>Weekly Performance Reports</li>
+        <li>Dedicated Account Manager</li>
+      </ul>
+      <button class="pricing-btn outline" onclick="openQuiz()">Get Started</button>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-label">How We Work</div>
+  <h2 class="section-title reveal">THE<br><span class="dim">PROCESS</span></h2>
+  <div class="process-steps">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-idx">Step 01</div>
+      <div class="step-title">Discovery</div>
+      <p class="step-desc">Deep dive into your brand, audience, and goals. We align on visual direction and KPIs before a single frame is shot.</p>
+    </div>
+    <div class="step reveal" style="transition-delay:.15s">
+      <div class="step-num">02</div>
+      <div class="step-idx">Step 02</div>
+      <div class="step-title">Strategy</div>
+      <p class="step-desc">We build a full content roadmap — storyboards, shot lists, copy frameworks, and campaign calendars.</p>
+    </div>
+    <div class="step reveal" style="transition-delay:.3s">
+      <div class="step-num">03</div>
+      <div class="step-idx">Step 03</div>
+      <div class="step-title">Production</div>
+      <p class="step-desc">Our crew handles everything: lighting, direction, colour grading, editing, and motion design.</p>
+    </div>
+    <div class="step reveal" style="transition-delay:.45s">
+      <div class="step-num">04</div>
+      <div class="step-idx">Step 04</div>
+      <div class="step-title">Launch & Optimise</div>
+      <p class="step-desc">We publish, monitor, A/B test, and optimise in real time — iterating to maximise reach and conversions.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-label">Client Love</div>
+  <h2 class="section-title reveal">WHAT THEY<br><span class="dim">SAY</span></h2>
+  <div class="testimonials-grid">
+    <div class="testi-card reveal">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Fovia Labs completely transformed our social presence. Our reel views went from 2K to 200K within a month. Absolutely cinematic quality.</p>
+      <div class="testi-author"><div class="testi-avatar">RK</div><div><div class="testi-name">Rohan Kapoor</div><div class="testi-role">Founder, Kapoor Lifestyle</div></div></div>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.15s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">The team at Fovia Labs doesn't just create content — they tell stories. Our product launch campaign got 3x more engagement than anything before.</p>
+      <div class="testi-author"><div class="testi-avatar">PS</div><div><div class="testi-name">Priya Sharma</div><div class="testi-role">Marketing Head, StyleHub</div></div></div>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.3s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">Incredible attention to detail. From colour grading to music sync — every deliverable felt like it came from a Hollywood production house.</p>
+      <div class="testi-author"><div class="testi-avatar">AM</div><div><div class="testi-name">Arjun Mehta</div><div class="testi-role">Creative Director, Aura Studios</div></div></div>
+    </div>
+    <div class="testi-card reveal" style="transition-delay:.45s">
+      <div class="testi-stars">★★★★★</div>
+      <div class="testi-quote">"</div>
+      <p class="testi-text">We needed a rapid-turnaround Diwali campaign and Fovia Labs delivered exceptional quality under tight deadlines. Our go-to creative partner now.</p>
+      <div class="testi-author"><div class="testi-avatar">NP</div><div><div class="testi-name">Neha Patil</div><div class="testi-role">CEO, Bloom Retail</div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="section-label">Got Questions?</div>
+  <h2 class="section-title reveal">FREQUENTLY<br><span class="dim">ASKED</span></h2>
+  <div class="faq-grid" id="faqGrid">
+    <div class="faq-item reveal">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>How long does it take to get started?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">We typically onboard new clients within 3–5 business days. After a discovery call, we'll have a content plan ready within a week and begin production immediately after approval.</div></div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.1s">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>Do you work with small businesses?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Absolutely. Our Starter package is designed specifically for small and growing businesses. We've helped everything from solo entrepreneurs to large retail chains — we adapt to your scale and goals.</div></div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.2s">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>Will you manage our social media accounts?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Yes! Our Growth and Premium packages include full social media management — content scheduling, community engagement, and platform-specific optimisation across Instagram, Facebook, YouTube, and LinkedIn.</div></div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.3s">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>What do you need from us to get started?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">We'll need access to your brand assets (logos, brand guidelines if any), social media login credentials for management, and a 30-minute onboarding call. We handle everything else.</div></div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.4s">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>Do you offer custom packages?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">Yes. If our standard packages don't perfectly fit your needs, we create fully custom scopes. Contact us with your requirements and budget and we'll put together a tailored proposal within 48 hours.</div></div>
+    </div>
+    <div class="faq-item reveal" style="transition-delay:.5s">
+      <button class="faq-q" onclick="toggleFaq(this)"><span>How do you measure results?</span><span class="icon">+</span></button>
+      <div class="faq-a"><div class="faq-a-inner">We track reach, impressions, engagement rate, follower growth, website clicks, and ad ROAS (return on ad spend). You'll receive detailed reports — bi-weekly on Growth and weekly on Premium — with actionable insights.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="contact-wrapper">
+    <div class="contact-info reveal">
+      <div class="section-label">Get In Touch</div>
+      <h2>LET'S<br>CREATE<br><span>TOGETHER</span></h2>
+      <p>Ready to elevate your brand? Drop us a message and we'll get back within 24 hours.</p>
+      <div class="contact-detail">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1-9.4 0-17-7.6-17-17 0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.3.2 2.5.6 3.6.1.3 0 .7-.2 1L6.6 10.8z"/></svg></div>
+        <div><div class="contact-detail-label">Phone</div><div class="contact-detail-text"><a href="tel:9880314662">+91 98803 14662</a></div></div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+        <div><div class="contact-detail-label">Email</div><div class="contact-detail-text"><a href="mailto:Vaibhavdesai880@gmail.com">Vaibhavdesai880@gmail.com</a></div></div>
+      </div>
+      <div class="contact-detail">
+        <div class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg></div>
+        <div><div class="contact-detail-label">Location</div><div class="contact-detail-text"><span>Belagavi, Karnataka, India</span></div></div>
+      </div>
+    </div>
+    <form class="contact-form reveal" style="transition-delay:.2s" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Your Name</label><input class="form-input" type="text" placeholder="Full Name" required/></div>
+        <div class="form-group"><label class="form-label">Your Email</label><input class="form-input" type="email" placeholder="you@email.com" required/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">Phone</label><input class="form-input" type="tel" placeholder="+91 00000 00000"/></div>
+        <div class="form-group">
+          <label class="form-label">Service Needed</label>
+          <select class="form-select">
+            <option value="" disabled selected>Select a service</option>
+            <option>Cinematic Reels</option>
+            <option>Social Media Marketing</option>
+            <option>Brand Photography</option>
+            <option>Ad Campaigns</option>
+            <option>Brand Identity</option>
+            <option>Motion Graphics</option>
+            <option>Custom Package</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group"><label class="form-label">Your Message</label><textarea class="form-textarea" placeholder="Tell us about your project, goals, and timeline..."></textarea></div>
+      <button type="submit" class="form-submit" id="submitBtn">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">FOVIA<span> LABS</span></div>
+      <p>Cinematic visuals and strategic social media marketing that make brands unforgettable.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#" aria-label="Instagram">IG</a>
+        <a class="social-btn" href="#" aria-label="YouTube">YT</a>
+        <a class="social-btn" href="#" aria-label="LinkedIn">LI</a>
+        <a class="social-btn" href="#" aria-label="Facebook">FB</a>
+      </div>
+    </div>
+    <div class="footer-links">
+      <h4>Services</h4>
+      <ul>
+        <li><a href="#services">Cinematic Reels</a></li>
+        <li><a href="#services">Social Media Marketing</a></li>
+        <li><a href="#services">Brand Photography</a></li>
+        <li><a href="#services">Ad Campaigns</a></li>
+        <li><a href="#services">Motion Graphics</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#work">Portfolio</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-links">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:9880314662">+91 98803 14662</a></li>
+        <li><a href="mailto:Vaibhavdesai880@gmail.com">Vaibhavdesai880@gmail.com</a></li>
+        <li><a href="#contact">Belagavi, Karnataka</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Fovia Labs. All rights reserved.</span>
+    <span style="display:flex;gap:20px"><a href="#" style="color:var(--muted);text-decoration:none;transition:color .3s" onmouseover="this.style.color='var(--accent1)'" onmouseout="this.style.color='var(--muted)'">Privacy Policy</a><a href="#" style="color:var(--muted);text-decoration:none;transition:color .3s" onmouseover="this.style.color='var(--accent1)'" onmouseout="this.style.color='var(--muted)'">Terms of Service</a></span>
+  </div>
+</footer>
+
+<!-- COOKIE BANNER -->
+<div id="cookie">
+  <p>We use cookies to enhance your experience and analyse site traffic. By clicking "Accept", you agree to our <a href="#">Privacy Policy</a>.</p>
+  <div class="cookie-btns">
+    <button class="cookie-decline" onclick="dismissCookie()">Decline</button>
+    <button class="cookie-accept" onclick="acceptCookie()">Accept All</button>
+  </div>
+</div>
+
+<script>
+// ── LOADER ──
+const lbar = document.getElementById('lbar');
+const lpct = document.getElementById('lpct');
+const loader = document.getElementById('loader');
+let pct = 0;
+const iv = setInterval(() => {
+  pct += Math.random() * 18;
+  if (pct >= 100) { pct = 100; clearInterval(iv); setTimeout(() => { loader.classList.add('hidden'); }, 400); }
+  lbar.style.width = pct + '%';
+  lpct.textContent = Math.floor(pct) + '%';
+}, 120);
+
+// ── CURSOR ──
+const cur = document.getElementById('cur'), curT = document.getElementById('cur-t');
+document.addEventListener('mousemove', e => {
+  cur.style.left = e.clientX + 'px'; cur.style.top = e.clientY + 'px';
+  curT.style.left = e.clientX + 'px'; curT.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a,button,.service-card,.portfolio-item,.testi-card,.pricing-card,.faq-q,.client-logo').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.style.width = '20px'; cur.style.height = '20px'; curT.style.width = '56px'; curT.style.height = '56px'; });
+  el.addEventListener('mouseleave', () => { cur.style.width = '12px'; cur.style.height = '12px'; curT.style.width = '36px'; curT.style.height = '36px'; });
+});
+
+// ── SCROLL REVEAL ──
+const revEls = document.querySelectorAll('.reveal');
+const ro = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }), { threshold: 0.08 });
+revEls.forEach(el => ro.observe(el));
+
+// ── STICKY CTA ──
+const stickyCta = document.getElementById('sticky-cta');
+window.addEventListener('scroll', () => {
+  stickyCta.classList.toggle('show', window.scrollY > 400);
+});
+
+// ── NAV ACTIVE ──
+const sections = document.querySelectorAll('section[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur2 = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 130) cur2 = s.id; });
+  navLinks.forEach(a => { a.classList.toggle('active', a.getAttribute('href') === '#' + cur2); });
+});
+
+// ── STATS COUNTER ──
+const counters = document.querySelectorAll('.stat-num');
+const co = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    const el = entry.target, raw = el.textContent;
+    const num = parseFloat(raw.replace(/[^0-9.]/g, ''));
+    const suffix = raw.replace(/[0-9.]/g, '');
+    if (!isNaN(num)) {
+      let start = null;
+      const step = ts => {
+        if (!start) start = ts;
+        const prog = Math.min((ts - start) / 1800, 1);
+        const eased = 1 - Math.pow(1 - prog, 3);
+        el.textContent = (num < 10 ? (eased * num).toFixed(0) : Math.floor(eased * num)) + suffix;
+        if (prog < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    co.unobserve(el);
+  });
+}, { threshold: 0.5 });
+counters.forEach(c => co.observe(c));
+
+// ── QUIZ ──
+const quizData = {};
+function openQuiz() {
+  document.getElementById('quiz-overlay').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  // reset
+  document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+  document.getElementById('qs1').classList.add('active');
+  document.getElementById('qpfill').style.width = '25%';
+  document.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+}
+function closeQuiz() {
+  document.getElementById('quiz-overlay').classList.remove('active');
+  document.body.style.overflow = '';
+}
+document.getElementById('quiz-overlay').addEventListener('click', e => { if (e.target === document.getElementById('quiz-overlay')) closeQuiz(); });
+function selectOpt(el, key, val) {
+  el.closest('.quiz-options').querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+  quizData[key] = val;
+}
+function nextStep(n) {
+  document.getElementById('qs' + n).classList.remove('active');
+  document.getElementById('qs' + (n + 1)).classList.add('active');
+  document.getElementById('qpfill').style.width = ((n + 1) * 20) + '%';
+}
+function showResult() {
+  document.getElementById('qs4').classList.remove('active');
+  document.getElementById('qs5').classList.add('active');
+  document.getElementById('qpfill').style.width = '100%';
+  const budget = quizData.budget || '';
+  let plan = 'GROWTH PLAN', desc = 'Based on your answers, we recommend our Growth package — a perfect balance of cinematic content and strategic social media management to hit your goals.';
+  if (budget === 'Under ₹15K') { plan = 'STARTER PLAN'; desc = 'Our Starter package is a great fit — you\'ll get consistent social posts, reels, and a solid foundation to grow your audience without overspending.'; }
+  else if (budget === '₹80K+') { plan = 'PREMIUM PLAN'; desc = 'You\'re ready for the full experience. Our Premium package gives you unlimited content, full ad campaign management, and a dedicated account manager to scale fast.'; }
+  document.getElementById('quiz-plan-name').textContent = plan;
+  document.getElementById('quiz-plan-desc').textContent = desc;
+}
+
+// ── FAQ ──
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => { i.classList.remove('open'); i.querySelector('.icon').textContent = '+'; });
+  if (!wasOpen) { item.classList.add('open'); btn.querySelector('.icon').textContent = '−'; }
+}
+
+// ── CONTACT FORM ──
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Sending...'; btn.style.opacity = '.7';
+  setTimeout(() => {
+    btn.textContent = 'Message Sent! ✓'; btn.style.background = '#47ffb0';
+    setTimeout(() => { btn.textContent = 'Send Message →'; btn.style.background = 'var(--accent1)'; btn.style.opacity = '1'; e.target.reset(); }, 3000);
+  }, 1500);
+}
+
+// ── COOKIE ──
+const cookieBanner = document.getElementById('cookie');
+setTimeout(() => { if (!sessionStorage.getItem('cookieSeen')) cookieBanner.classList.add('show'); }, 2000);
+function acceptCookie() { cookieBanner.classList.remove('show'); sessionStorage.setItem('cookieSeen', '1'); }
+function dismissCookie() { cookieBanner.classList.remove('show'); sessionStorage.setItem('cookieSeen', '1'); }
+</script>
+</body>
+</html>
